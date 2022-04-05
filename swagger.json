@@ -1,0 +1,151 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Cashback API",
+        "version": "1.0.0",
+        "title": "Cashback API",
+        "contact": {
+            "email": "abc@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "schemes": ["http"],
+    "host": "localhost:3000",
+    "basePath": "/",
+    "paths" : {
+        "/ruleset" : {
+                "get" : {
+                "summary" : "Get all the rulesets",
+                "description": "Get all the rulesets",
+                "produces": ["application/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "fetch all rulesets",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/RulesetDTO"
+                            }
+                        }
+                    }
+                }
+            },
+            "post":{
+                "summary":"Create a ruleset",
+                "description":"Create a ruleset",
+                "produces":["application/json"],
+                "consumes":["application/json"],
+                "parameters":[
+                    {
+                        "in":"body",
+                        "name":"body",
+                        "description":"ruleset object",
+                        "required":true,
+                        "schema":{
+                            "type":"object",
+                            "properties":{
+                                "ruleset":{
+                                    "type":"object",
+                                    "$ref":"#/definitions/RulesetDTO"
+                                }
+                            }
+                        }
+                    }
+                ]                
+            }
+        },
+        "/transactions":{
+            "post":{
+                "summary":"record a transaction",
+                "description":"record a transaction",
+                "produces":["application/json"],
+                "consumes":["application/json"],
+                "parameters":[
+                    {
+                        "in":"body",
+                        "name":"body",
+                        "description":"transaction object",
+                        "required":true,
+                        "schema":{
+                            "type":"object",
+                            "properties":{
+                                "ruleset":{
+                                    "type":"object",
+                                    "$ref":"#/definitions/TransactionDTO"
+                                }
+                            }
+                        }
+                    }
+                ] 
+            }
+        },
+        "/cashback":{
+            "get" : {
+                "summary" : "Get all the cashback transactions",
+                "description": "Get all the cashback transactions",
+                "produces": ["application/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "fetch all cashback transactions",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/TransactionDTO"
+                            }
+                        }
+                    }
+                }
+        }
+    }
+},
+    "definitions": {
+        "RulesetDTO": {
+            "type": "object",
+            "properties": {
+                "id": {
+                     "type": "string"
+                },
+                "startDate": {
+                    "type": "string"
+                },
+                "endDate": {
+                    "type": "string"
+                },
+                "cashback": {
+                    "type": "number"
+                },
+                "redemptionLimit": {
+                    "type": "number"
+                },
+                "transactions": {
+                    "$ref": "#/definitions/TransactionDTO"
+                }
+            }
+        },
+        "TransactionDTO": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "customerId": {
+                    "type": "string"
+                },
+                "amount": {
+                    "type": "number"
+                },
+                "hasCashback": {
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}

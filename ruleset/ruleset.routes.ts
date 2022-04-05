@@ -1,5 +1,7 @@
 import { CommonRoutes } from "../common/common.routes";
 import express from "express";
+import RulesetController from "./controllers/ruleset.controller";
+import RuleSetMiddleware from './middleware/ruleset.middleware';
 
 export class RulesetRoutes extends CommonRoutes{
     constructor(app:express.Application){
@@ -9,13 +11,19 @@ export class RulesetRoutes extends CommonRoutes{
     configureRoutes(){
 
         this.app.route('/ruleset')
-            .get((req:express.Request,res:express.Response)=>{
-                res.status(200).send('List of rulessets in the system');
-            })
-            .post((req:express.Request,res:express.Response)=>{
-                res.status(201).send('ruleset created');
-            });
+            .get(RulesetController.listRulesets)
+            .post(
+                RuleSetMiddleware.validateRequiredCreateRulesetFields,
+                RuleSetMiddleware.validateDateFields,
+                RulesetController.createRuleset
+                );
+        
+        this.app.param('id',RuleSetMiddleware.extractRulesetId);
 
+        this.app.route('/ruleset/:id')
+                .all(RuleSetMiddleware.validateRulesetIdExists)
+                .get(RulesetController.getRulesetsById)
+        
         return this.app;
     }
 }
